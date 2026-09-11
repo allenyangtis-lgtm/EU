@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>德捷奧自由行 · 10/14–10/22</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFFFFF; --card:#F0F2F5; --card-gold:#FFF6E5;
+    --line:#E3E6EA; --ink:#16181D; --ink-dim:#6B7280; --ink-dim2:#9AA1AC;
+    --blue:#2F6FED; --gold:#C8862A;
+  }
+  *{box-sizing:border-box;}
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:'Noto Sans TC',-apple-system,sans-serif; display:flex; justify-content:center; }
+  .app{ width:100%; max-width:480px; padding-bottom:56px; }
+
+  .topbar{ display:flex; align-items:center; justify-content:space-between; padding:16px 16px 8px; }
+  .back-btn{ width:34px; height:34px; border-radius:10px; border:1px solid var(--line); background:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; color:var(--ink); }
+  .title-pill{ font-size:15px; font-weight:700; color:var(--ink); }
+  .icon-btn{ width:34px; height:34px; border-radius:10px; border:1px solid var(--line); background:#fff; display:flex; align-items:center; justify-content:center; font-size:16px; }
+
+  .day-tabs{ display:flex; align-items:center; gap:18px; padding:10px 18px 14px; overflow-x:auto; scrollbar-width:none; border-bottom:1px solid var(--line); }
+  .day-tabs::-webkit-scrollbar{ display:none; }
+  .day-tab{ flex:0 0 auto; font-size:14.5px; font-weight:600; color:var(--ink-dim2); padding-bottom:8px; white-space:nowrap; position:relative; }
+  .day-tab.active{ color:var(--ink); }
+  .day-tab.active::after{ content:''; position:absolute; left:0; right:0; bottom:-1px; height:2px; background:var(--ink); border-radius:2px; }
+
+  .day-head{ padding:16px 18px 4px; }
+  .day-title{ font-size:19px; font-weight:700; color:var(--ink); line-height:1.4; }
+  .day-sub{ font-size:12.5px; color:var(--ink-dim2); margin-top:2px; }
+  .banner{ margin:10px 18px 4px; background:#FFF6E5; border:1px solid #F0DBA6; border-radius:10px; padding:10px 12px; font-size:12px; line-height:1.6; color:#8A6D2E; }
+
+  .timeline{ padding:14px 18px 0; }
+
+  .card-wrap{ position:relative; margin-bottom:4px; }
+  .card{
+    display:flex; gap:12px; background:var(--card); border-radius:16px; padding:10px; position:relative;
+  }
+  .card.gold{ background:var(--card-gold); }
+
+  .thumb{
+    flex:0 0 96px; width:96px; height:96px; border-radius:12px; overflow:hidden; position:relative;
+    background:#E4E7EC; border:1.5px dashed #C7CCD4; display:flex; align-items:center; justify-content:center;
+  }
+  .thumb img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .thumb .placeholder-icon{ font-size:26px; color:#AEB4BD; }
+  .flag-num{
+    position:absolute; top:8px; left:0; background:var(--blue); color:#fff; font-weight:700; font-size:13px;
+    padding:2px 9px 2px 8px; border-radius:0 6px 6px 0; line-height:1.5;
+    clip-path:polygon(0 0, 82% 0, 100% 50%, 82% 100%, 0 100%);
+  }
+
+  .card-body{ flex:1; min-width:0; padding:4px 30px 4px 2px; position:relative; }
+  .time-row{ display:flex; align-items:center; gap:6px; margin-bottom:4px; }
+  .cam-icon{ color:var(--blue); font-size:13px; }
+  .time-text{ color:var(--blue); font-weight:700; font-size:14.5px; }
+  .badge-gray{ background:#E7EAEE; color:var(--ink-dim); font-size:11px; padding:2px 8px; border-radius:6px; font-weight:600; }
+
+  .stop-title{ font-size:16px; font-weight:700; color:var(--ink); line-height:1.4; text-decoration:none; display:block; margin-bottom:3px; }
+  a.stop-title:active{ opacity:0.7; }
+  .stop-meta{ font-size:12px; color:var(--ink-dim); line-height:1.6; }
+  .stop-note{ font-size:12px; color:var(--ink-dim); margin-top:2px; line-height:1.6; }
+  .ref-link{ display:inline-flex; align-items:center; gap:4px; margin-top:4px; font-size:11.5px; color:var(--blue); text-decoration:none; }
+
+  .nav-circle{
+    position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:50%;
+    background:#fff; border:1px solid var(--line); display:flex; align-items:center; justify-content:center;
+    font-size:13px; color:var(--ink-dim);
+  }
+
+  .connector{
+    display:flex; align-items:center; gap:6px; padding:8px 0 8px 46px; position:relative;
+  }
+  .connector::before{
+    content:''; position:absolute; left:57px; top:-4px; bottom:-4px; width:0; border-left:2px dotted #C7CCD4;
+  }
+  .connector .pill{
+    display:inline-flex; align-items:center; gap:5px; font-size:12.5px; color:var(--ink-dim); font-weight:600;
+    background:#fff; border:1px solid var(--line); padding:4px 10px; border-radius:999px; position:relative; z-index:1;
+  }
+
+  footer{ text-align:center; padding:36px 20px 8px; color:var(--ink-dim2); font-size:12px; }
+</style>
+</head>
+<body>
+<div class="app" id="app"></div>
+
+<script>
+const EMOJI = {
+  castle:"🏰", church:"⛪", tower:"🗼", bridge:"🌉", square:"🏛️", museum:"🖼️",
+  garden:"🌳", market:"🛍️", food:"🍽️", train:"🚆", bus:"🚌", flight:"✈️",
+  ship:"⛴️", music:"🎻", lake:"🏞️", clock:"🕐", light:"✨", stay:"🌙", info:"📍", walk:"🚶",
+};
+const TRAVEL_ICON = { walk:"🚶", bus:"🚌", train:"🚆", ship:"⛴️", transit:"🚇" };
+
+/* photo: leave "" empty for now — 之後補圖片時，把對應項目的 photo 欄位換成圖片網址即可 */
+const DAYS = [
+  { day:"Day 1", date:"10/14", weekday:"週三", title:"抵達慕尼黑 → 轉乘前往布拉格",
+    banner:"RegioJet巴士車票已訂:16:30 Munich ZOB(Hackerbrücke)4號月台出發,座位27、28,約4小時45分,21:15抵達Prague ÚAN Florenc", items:[
+    {time:"14:00",title:"抵達慕尼黑機場",loc:"慕尼黑",emoji:"flight",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Munich%20Airport"},
+    {travel:"🚊 約45分鐘"},
+    {time:"15:00",title:"慕尼黑ZOB巴士總站",loc:"慕尼黑",emoji:"bus",photo:"",note:"搭電車或計程車前往Hackerbrücke",map:"https://www.google.com/maps/search/?api=1&query=Munich%20ZOB%20Hackerbrucke"},
+    {travel:"🚌 約4小時45分"},
+    {time:"16:30",title:"RegioJet巴士出發（4號月台）",loc:"慕尼黑",emoji:"bus",photo:"",highlight:true,note:"座位27、28",map:"https://www.google.com/maps/search/?api=1&query=Munich%20ZOB%20Hackerbrucke"},
+    {time:"21:15",title:"抵達布拉格 ÚAN Florenc",loc:"布拉格",emoji:"bus",photo:"",highlight:true,map:"https://www.google.com/maps/search/?api=1&query=Florenc%20Bus%20Station%20Prague"},
+    {travel:"🚇 地鐵C線3站,約8分鐘"},
+    {time:"約21:30",title:"入住 Nobilis Residence Prague",loc:"布拉格",emoji:"stay",photo:"",highlight:true,note:"nám. I. P. Pavlova 1787/1。從Florenc搭地鐵C線(往Háje方向)到I.P. Pavlova站,出站步行2-3分鐘即達,不用轉車",map:"https://www.google.com/maps/search/?api=1&query=Nobilis+Residence+Prague"},
+  ]},
+  { day:"Day 2", date:"10/15", weekday:"週四", title:"18景點全步行路線：老城→查理大橋→城堡→佩特任→國家劇院看歌劇，夜訪Vinohrady燈火節",
+    banner:"午餐已訂位Pork's Mostecka 13:00,過橋後約12:00-12:05抵達,先逛列儂牆、聖尼古拉教堂(都在附近,順路),13:00準時吃飯到約14:00,再上城堡(15:40最晚入場,時間充裕),城堡沿山脊到佩特任,下山後直接往國家劇院方向走(不再折返小城區)。空出來的時間順路排了斯拉維亞咖啡休息。晚上18:55到國家劇院,19:00《佩利亞斯與梅麗桑德》看30-40分鐘提早離場,轉地鐵A線到Vinohrady看Signal Festival(聖盧德米拉教堂),回飯店約22:40", items:[
+    {time:"07:30",title:"從Nobilis Residence Prague出發",loc:"布拉格",emoji:"walk",photo:"",note:"nám. I.P. Pavlova出發",map:"https://www.google.com/maps/search/?api=1&query=Nobilis+Residence+Prague"},
+    {travel:"🚶 約20分鐘"},
+    {time:"07:50",title:"① Café Imperial 早餐",loc:"布拉格",emoji:"food",photo:"",highlight:true,stay:"停留45分",note:"新藝術風格百年咖啡館,Art Deco馬賽克拼貼天花板很出名",map:"https://www.google.com/maps/search/?api=1&query=Cafe+Imperial+Prague"},
+    {travel:"🚶 約10分鐘"},
+    {time:"08:45",title:"② Hotel NH Collection Prague Carlo IV 拍照",loc:"布拉格",emoji:"museum",photo:"",stay:"停留15分",note:"百年銀行大廳改建,挑高圓頂大廳IG熱門拍照點,可直接進大廳",map:"https://www.google.com/maps/search/?api=1&query=NH+Collection+Prague+Carlo+IV"},
+    {travel:"🚶 約10分鐘"},
+    {time:"09:10",title:"③ 火藥塔（外觀拍照）",loc:"布拉格",emoji:"tower",photo:"",stay:"停留10分",note:"10月要10:00才開放登塔,時間排不進去,先拍外觀就好",map:"https://www.google.com/maps/search/?api=1&query=Prasna+Brana+Powder+Tower+Prague"},
+    {travel:"🚶 約15分鐘"},
+    {time:"09:35",title:"⑱ 卡夫卡雕塑",loc:"布拉格",emoji:"square",photo:"",stay:"停留10分",note:"Jaroslav Róna作品,騎在無頭身軀上的卡夫卡銅像",map:"https://www.google.com/maps/search/?api=1&query=Franz%20Kafka%20Statue%20Prague%20Vezenska"},
+    {travel:"🚶 約10分鐘"},
+    {time:"09:55",title:"④⑤ 老城廣場＋天文鐘",loc:"布拉格",emoji:"clock",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Prague%20Old%20Town%20Square,%20Czech%20Republic%20-%20Oct%202010.jpg",highlight:true,stay:"停留40分",note:"卡在10:00整點報時前抵達,順便逛老城廣場、泰恩教堂外觀",map:"https://www.google.com/maps/search/?api=1&query=Prague%20Astronomical%20Clock"},
+    {travel:"🚶 約10分鐘"},
+    {time:"10:45",title:"⑥ 克萊門特學院",loc:"布拉格",emoji:"museum",photo:"",highlight:true,stay:"停留40分",note:"巴洛克天文塔或圖書館導覽,建議先線上確認當日導覽時段",map:"https://www.google.com/maps/search/?api=1&query=Klementinum+Prague"},
+    {travel:"🚶 約5分鐘"},
+    {time:"11:30",title:"⑦ 老城橋塔",loc:"布拉格",emoji:"tower",photo:"",stay:"停留15分",note:"查理大橋東側橋塔,可登塔看橋景",map:"https://www.google.com/maps/search/?api=1&query=Old%20Town%20Bridge%20Tower%20Prague"},
+    {time:"11:45",title:"⑧ 查理大橋過橋",loc:"布拉格",emoji:"bridge",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Charles%20Bridge%20Prague.jpg",highlight:true,stay:"停留20分",note:"找St. John of Nepomuk雕像摸一下求好運,約12:00-12:05抵達小城區這一側",map:"https://www.google.com/maps/search/?api=1&query=Charles%20Bridge%20Prague"},
+    {travel:"🚶 約10分鐘"},
+    {time:"12:15",title:"⑨ 列儂牆",loc:"布拉格",emoji:"square",photo:"",stay:"停留15分",map:"https://www.google.com/maps/search/?api=1&query=John%20Lennon%20Wall%20Prague"},
+    {travel:"🚶 約8分鐘"},
+    {time:"12:38",title:"⑩ 聖尼古拉教堂",loc:"布拉格",emoji:"church",photo:"",stay:"停留約15分",note:"小城區巴洛克代表作,先快速逛一下,時間差不多就往餐廳走",map:"https://www.google.com/maps/search/?api=1&query=St.%20Nicholas%20Church%20Mala%20Strana%20Prague"},
+    {travel:"🚶 約10分鐘"},
+    {time:"13:00",title:"午餐 — Pork's Mostecka",loc:"布拉格",emoji:"food",photo:"",highlight:true,stay:"停留約1小時",note:"位於Mostecká街,過橋走2、3分鐘就到,剛好在通往城堡的必經之路上,訂位13:00,吃到約14:00",map:"https://www.google.com/maps/search/?api=1&query=Pork's+Mostecka+Prague"},
+    {travel:"🚶 約20分鐘（上坡經Radnické schody往城堡）"},
+    {time:"14:20",title:"⑪ Radnické schody階梯",loc:"布拉格",emoji:"square",photo:"",stay:"停留10分",note:"兩側老房子很好拍,上城堡途中順路",map:"https://www.google.com/maps/search/?api=1&query=Radnicke%20schody%20Prague"},
+    {travel:"🚶 約10分鐘"},
+    {time:"14:40",title:"⑫ 聖維特主教座堂",loc:"布拉格",emoji:"church",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/St%20Vitus%20Prague%20September%202016-21.jpg",highlight:true,stay:"停留40分",note:"⚠️10月最晚入場15:40,現在時間還算充裕,慕夏之窗必拍",map:"https://www.google.com/maps/search/?api=1&query=St.%20Vitus%20Cathedral%20Prague"},
+    {time:"15:20",title:"⑬ Zlatá ulička u Daliborky（黃金巷）",loc:"布拉格",emoji:"castle",photo:"",stay:"停留30分",note:"卡夫卡曾租賃過的22號小屋在這條巷子裡",map:"https://www.google.com/maps/search/?api=1&query=Golden%20Lane%20Prague"},
+    {travel:"🚶 約35分鐘（沿飢餓城牆步道往佩特任,不用下山再上山）"},
+    {time:"16:25",title:"⑭ 佩特任瞭望台",loc:"布拉格",emoji:"tower",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Petrin%20Praha.jpg",highlight:true,stay:"停留40分",note:"360度城市全景",map:"https://www.google.com/maps/search/?api=1&query=Petrin%20Lookout%20Tower%20Prague"},
+    {travel:"🚶 約40分鐘（下山沿河往國家劇院方向,不再回小城區,避免回頭路）"},
+    {time:"17:45",title:"斯拉維亞咖啡 — 休息一下",loc:"布拉格",emoji:"food",photo:"",stay:"停留35分",note:"國家劇院對面,時間剛好空出來,順路喝杯咖啡休息,等開演",map:"https://www.google.com/maps/search/?api=1&query=Cafe%20Slavia%20Prague"},
+    {travel:"🚶 約5分鐘"},
+    {time:"18:20",title:"國家劇院周邊拍照",loc:"布拉格",emoji:"square",photo:"",stay:"停留約35分",note:"提早到,劇院外觀跟大廳拍照",map:"https://www.google.com/maps/search/?api=1&query=National%20Theatre%20Prague"},
+    {time:"18:55",title:"國家劇院集合入場",loc:"布拉格",emoji:"music",photo:"",highlight:true,note:"票已確認,提早入場找座位",map:"https://www.google.com/maps/search/?api=1&query=National%20Theatre%20Prague"},
+    {time:"19:00",title:"歌劇《佩利亞斯與梅麗桑德》Pelléas et Mélisande",loc:"布拉格",emoji:"music",photo:"",highlight:true,stay:"停留約30-40分",note:"以拍照為主,看一小段就提早離場,不用看完",map:"https://www.google.com/maps/search/?api=1&query=National%20Theatre%20Prague"},
+    {travel:"🚶 約15分鐘走到地鐵站"},
+    {time:"約19:55",title:"轉地鐵A線前往Náměstí Míru",loc:"布拉格",emoji:"metro",photo:"",note:"約15分鐘"},
+    {travel:"🚇 約15分鐘"},
+    {time:"20:10",title:"聖盧德米拉教堂 — Signal Festival Vinohrady路線",loc:"布拉格",emoji:"light",photo:"",highlight:true,stay:"停留約1.5小時",note:"Náměstí Míru廣場,燈光裝置日落後才會開始運作",map:"https://www.google.com/maps/search/?api=1&query=St.%20Ludmila%20Church%20Prague%20Namesti%20Miru"},
+    {travel:"🚶 約10分鐘"},
+    {time:"21:50",title:"Vinohrady小酌/甜點",loc:"布拉格",emoji:"food",photo:"",stay:"停留約35分",note:"中午已吃過正式午餐,這裡輕鬆喝一杯或吃甜點就好,不用再吃一頓正餐"},
+    {travel:"🚇 約15分鐘"},
+    {time:"約22:40",title:"返回 Nobilis Residence Prague",loc:"布拉格",emoji:"stay",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Nobilis+Residence+Prague"},
+  ]},
+  { day:"Day 3", date:"10/16", weekday:"週五", title:"庫倫洛夫Český Krumlov一日遊 → 晚上返回布拉格，國家劇院看歌劇《卡門》",
+    banner:"去程、回程車票都已確認。去程07:00 Florenc出發,09:30抵達CK(Spicak Bus Station)。回程15:05從CK出發,17:45抵達布拉格Na Knížecí(斯米霍夫)——注意不是Florenc,在地鐵B線上。⚠️晚上改成19:00國家劇院看《卡門》歌劇(1排19、20座,二樓包廂,票已確認),原本排的瓦茨拉夫廣場跟高堡拿掉了,時間兜不上,如果還想去可以另外找一天補", items:[
+    {time:"07:00",title:"佛羅倫斯巴士站,搭FlixBus前往庫倫洛夫",loc:"布拉格",emoji:"bus",photo:"",highlight:true,note:"車票已確認,座位27、28",map:"https://www.google.com/maps/search/?api=1&query=Florenc%20Bus%20Station%20Prague"},
+    {travel:"🚌 約2.5小時"},
+    {time:"09:30",title:"抵達庫倫洛夫(Spicak Bus Station),舊城散步",loc:"庫倫洛夫",emoji:"square",photo:"",stay:"停留45分",map:"https://www.google.com/maps/search/?api=1&query=Cesky%20Krumlov%20Spicak%20Bus%20Station"},
+    {time:"10:15",title:"庫倫洛夫城堡",loc:"庫倫洛夫",emoji:"castle",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Ceskykrumlov.JPG",highlight:true,stay:"停留約2小時",note:"含城堡塔景觀台",map:"https://www.google.com/maps/search/?api=1&query=Cesky%20Krumlov%20Castle"},
+    {time:"12:15",title:"午餐",loc:"庫倫洛夫",emoji:"food",photo:"",stay:"停留約1小時"},
+    {time:"13:15",title:"伏爾塔瓦河畔散步",loc:"庫倫洛夫",emoji:"lake",photo:"",stay:"停留約1小時20分",map:"https://www.google.com/maps/search/?api=1&query=Vltava%20River%20Cesky%20Krumlov"},
+    {travel:"🚶 約15分鐘走回巴士站"},
+    {time:"15:05",title:"搭車返回布拉格(Cesky Krumlov Spicak Bus Station)",loc:"庫倫洛夫",emoji:"bus",photo:"",highlight:true,note:"車票已確認,座位35、36",map:"https://www.google.com/maps/search/?api=1&query=Cesky%20Krumlov%20Spicak%20Bus%20Station"},
+    {travel:"🚌 約2小時40分"},
+    {time:"17:45",title:"抵達布拉格 Na Knížecí(斯米霍夫)",loc:"布拉格",emoji:"bus",photo:"",highlight:true,note:"地鐵B線站,不是Florenc,注意別搭錯方向",map:"https://www.google.com/maps/search/?api=1&query=Na%20Knizeci%20Bus%20Station%20Prague"},
+    {travel:"🚇 地鐵B線往國家劇院方向,約20分鐘(含轉乘步行)"},
+    {time:"18:10",title:"晚餐",loc:"布拉格",emoji:"food",photo:"",stay:"停留約40分",note:"國家劇院附近找快一點的餐廳,時間有點趕"},
+    {travel:"🚶 約10分鐘"},
+    {time:"18:50",title:"國家劇院集合",loc:"布拉格",emoji:"music",photo:"",highlight:true,note:"建議正式一點的穿著,提早入場找座位",map:"https://www.google.com/maps/search/?api=1&query=National%20Theatre%20Prague"},
+    {time:"19:00",title:"歌劇《卡門》Carmen",loc:"布拉格",emoji:"music",photo:"",highlight:true,stay:"約3小時(含中場休息)",note:"1排19、20座,二樓包廂,票已確認",map:"https://www.google.com/maps/search/?api=1&query=National%20Theatre%20Prague"},
+    {travel:"🚶 約5分鐘"},
+    {time:"約22:05",title:"跳舞的房子（夜景）",loc:"布拉格",emoji:"museum",photo:"",stay:"停留15分",note:"國家劇院旁邊,順路看個夜景就好",map:"https://www.google.com/maps/search/?api=1&query=Dancing%20House%20Prague"},
+    {travel:"🚇 地鐵約20分鐘"},
+    {time:"約22:45",title:"返回 Nobilis Residence Prague",loc:"布拉格",emoji:"stay",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Nobilis+Residence+Prague"},
+  ]},
+  { day:"Day 4", date:"10/17", weekday:"週六", title:"藝術史博物館 → 舊城核心 → 金色大廳",
+    banner:"RegioJet火車票已訂:06:01 Prague MS(Masarykovo nádraží)出發,RJ1031次,6號車廂,座位85、86,約4小時20分,10:21抵達Vienna Hbf。⚠️Masarykovo nádraží不在飯店旁的C線上,從Nobilis Residence(I.P. Pavlova站)搭C線到Florenc後,還要再步行約10分鐘或轉搭B線到Náměstí Republiky再步行,建議05:15前就從飯店出發較保險。博物館咖啡廳已確認訂位11:45,順序改成先吃再逛博物館,後續行程順延約30分鐘。今晚20:15金色大廳(Musikverein)音樂會,19:40入場,建議正式一點的穿著", items:[
+    {time:"06:01",title:"Prague MS出發（RJ1031次）",loc:"布拉格",emoji:"train",photo:"",highlight:true,note:"6號車廂,座位85、86",map:"https://www.google.com/maps/search/?api=1&query=Praha%20Masarykovo%20nadrazi"},
+    {travel:"🚆 約4小時20分"},
+    {time:"10:21",title:"抵達Vienna Hbf",loc:"維也納",emoji:"train",photo:"",highlight:true,map:"https://www.google.com/maps/search/?api=1&query=Wien%20Hauptbahnhof"},
+    {time:"10:35~11:00",title:"Hotel Motel One Wien-Hauptbahnhof 寄放行李",loc:"維也納",emoji:"stay",photo:"",note:"就在中央車站旁,很近",map:"https://www.google.com/maps/search/?api=1&query=Hotel+Motel+One+Wien-Hauptbahnhof"},
+    {travel:"🚶 約12分鐘"},
+    {time:"11:15",title:"藝術史博物館入場",loc:"維也納",emoji:"museum",photo:"",note:"先進場,直接前往咖啡廳",map:"https://www.google.com/maps/search/?api=1&query=Kunsthistorisches%20Museum%20Wien"},
+    {time:"11:45~13:00",title:"博物館Café — Café im Kunsthistorischen Museum",loc:"維也納",emoji:"food",photo:"",highlight:true,note:"⚠️已預約11:45,圓頂大廳裡的咖啡廳,先吃這頓再逛博物館(館內移動,不用額外走路時間)",map:"https://www.google.com/maps/search/?api=1&query=Cafe+im+Kunsthistorischen+Museum+Wien"},
+    {time:"13:05~14:20",title:"藝術史博物館 — 主展廳參觀",loc:"維也納",emoji:"museum",photo:"",highlight:true,stay:"停留約75分",map:"https://www.google.com/maps/search/?api=1&query=Kunsthistorisches%20Museum%20Wien"},
+    {travel:"🚶 約10分鐘"},
+    {time:"14:25~14:55",title:"霍夫堡皇宮",loc:"維也納",emoji:"castle",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Hofburg%20Wien"},
+    {travel:"🚶 約3分鐘"},
+    {time:"14:55~15:10",title:"英雄廣場",loc:"維也納",emoji:"square",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Heldenplatz%20Wien"},
+    {travel:"🚶 約5分鐘"},
+    {time:"15:15~16:00",title:"奧地利國家圖書館",loc:"維也納",emoji:"museum",photo:"",map:"https://www.google.com/maps/search/?api=1&query=%C3%96sterreichische%20Nationalbibliothek"},
+    {travel:"🚶 約8分鐘"},
+    {time:"16:05~16:35",title:"Café Demel",loc:"維也納",emoji:"food",photo:"",note:"皇帝煎餅",map:"https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Demel%20Wien"},
+    {travel:"🚶 約3分鐘"},
+    {time:"16:40~16:55",title:"黑死病紀念柱",loc:"維也納",emoji:"square",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Pests%C3%A4ule%20Graben%20Wien"},
+    {travel:"🚶 約2分鐘"},
+    {time:"16:55~17:10",title:"聖彼得教堂",loc:"維也納",emoji:"church",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Peterskirche%20Wien"},
+    {travel:"🚶 約5分鐘"},
+    {time:"17:10~17:45",title:"聖史蒂芬主教座堂",loc:"維也納",emoji:"church",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Stephansdom%20Wien"},
+    {travel:"🚶 約10分鐘"},
+    {time:"18:00~19:15",title:"Griechenbeisl晚餐",loc:"維也納",emoji:"food",photo:"",highlight:true,note:"⚠️訂位已確認:18:00,2人",map:"https://www.google.com/maps/search/?api=1&query=Griechenbeisl%20Wien"},
+    {travel:"🚇 約20分鐘"},
+    {time:"19:40",title:"抵達,入場前拍照",loc:"維也納",emoji:"music",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Musikverein%20Wien"},
+    {time:"20:15",title:"金色大廳音樂會",loc:"維也納",emoji:"music",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Vienna%20Austria%20Golden-Hall-of-Musikverein-01.jpg",highlight:true,note:"世界知名音樂廳,維也納愛樂固定演出場地",ref:"https://travelwithmiya.com/musikverein-grosser-saal/",map:"https://www.google.com/maps/search/?api=1&query=Musikverein%20Wien"},
+  ]},
+  { day:"Day 5", date:"10/18", weekday:"週日", title:"美泉宮 → 南區 → 百水 → 沃蒂夫",
+    banner:"⚠️發現Day4晚上已經去過聖彼得教堂跟黑死病紀念柱,原本Day5早上重複排了同兩個點,已經拿掉,改成早餐後直接去美泉宮(宮殿+花園,共3小時),安可鐘、莫扎特之家這次也一併拿掉了空出時間。今晚21:00沃蒂夫教堂「Light of Creation」燈光秀。⚠️住宿Hotel Motel One Wien-Hauptbahnhof在中央車站旁,離市中心跟今天大部分景點有段距離,這天會需要搭幾段地鐵/電車,不是純走路。午餐、晚餐地點還沒指定,交通時間是抓大概,實際餐廳確定後可以再調整。納許市場週日公休已拿掉,改成mani im vierten吃鬆餅", items:[
+    {time:"07:35",title:"從Hotel Motel One Wien-Hauptbahnhof出發",loc:"維也納",emoji:"walk",photo:"",note:"中央車站旁",map:"https://www.google.com/maps/search/?api=1&query=Hotel+Motel+One+Wien-Hauptbahnhof"},
+    {travel:"🚇 約25分鐘（需轉乘,距離較遠）"},
+    {time:"08:00",title:"早餐(Das Vivet)",loc:"維也納",emoji:"food",photo:"",note:"Westbahnstraße 21,離飯店較遠",map:"https://www.google.com/maps/search/?api=1&query=Das%20Vivet%20Wien"},
+    {travel:"🚇 約20分鐘（需轉乘,U4線可直達）"},
+    {time:"09:05",title:"美泉宮 Schönbrunn — 宮殿內部參觀",loc:"維也納",emoji:"castle",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Schloss%20Sch%C3%B6nbrunn%20Wien.jpg",highlight:true,stay:"停留約1.5小時",note:"哈布斯堡王朝夏宮,10月每天08:30-17:30開放,建議先線上買票避免排隊",map:"https://www.google.com/maps/search/?api=1&query=Schloss%20Sch%C3%B6nbrunn%20Wien"},
+    {time:"10:35",title:"美泉宮花園、格洛麗埃特觀景台",loc:"維也納",emoji:"garden",photo:"",highlight:true,stay:"停留約1.5小時",note:"花園免費開放,格洛麗埃特(Gloriette)登高可俯瞰整個宮殿花園",map:"https://www.google.com/maps/search/?api=1&query=Gloriette%20Schonbrunn"},
+    {travel:"🚇 約20分鐘（需轉乘,回市中心）"},
+    {time:"12:25~13:25",title:"自由活動/提前到餐廳附近晃晃",loc:"維也納",emoji:"info",photo:"",stay:"約1小時",note:"距13:30訂位還有一段時間,可以逛逛周邊或找地方休息"},
+    {time:"13:30",title:"午餐 — Ribs of Vienna",loc:"維也納",emoji:"food",photo:"",highlight:true,note:"⚠️訂位已確認:13:30,2人",ref:"https://www.threads.com/share/BBQC8yoOtj/",map:"https://www.google.com/maps/search/?api=1&query=Ribs+of+Vienna"},
+    {travel:"🚇 約15分鐘（轉乘往南區,距離較遠）"},
+    {time:"14:20",title:"卡爾教堂(Karlskirche)",loc:"維也納",emoji:"church",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Karlskirche%20Wien"},
+    {travel:"🚶 約3分鐘"},
+    {time:"14:40",title:"mani im vierten — 吃鬆餅",loc:"維也納",emoji:"food",photo:"",highlight:true,stay:"停留約35分",note:"週日納許市場公休,改成這間鬆餅店",ref:"https://www.threads.com/share/E7nNnwZDT/",map:"https://www.google.com/maps/search/?api=1&query=mani+im+vierten+Wien"},
+    {travel:"🚶 約10分鐘"},
+    {time:"15:00",title:"維也納國家歌劇院",loc:"維也納",emoji:"music",photo:"",note:"外觀",map:"https://www.google.com/maps/search/?api=1&query=Wiener%20Staatsoper"},
+    {travel:"🚶 約3分鐘"},
+    {time:"15:15",title:"阿爾貝蒂娜博物館",loc:"維也納",emoji:"museum",photo:"",stay:"停留約35分",map:"https://www.google.com/maps/search/?api=1&query=Albertina+Museum+Josefsplatz+1+Wien"},
+    {travel:"🚶 約1分鐘"},
+    {time:"15:50",title:"Bitzinger — 吃香腸",loc:"維也納",emoji:"food",photo:"",highlight:true,stay:"停留約20分",note:"就在阿爾貝蒂娜博物館旁邊,維也納知名香腸攤",ref:"https://youtu.be/kVMV8Y9YaoM?t=1242&si=V72Gabtffr5hjd_H",map:"https://www.google.com/maps/search/?api=1&query=Bitzinger+Wien"},
+    {travel:"🚋 約15分鐘（電車,距離較遠）"},
+    {time:"16:15",title:"美景宮(Belvedere)",loc:"維也納",emoji:"castle",photo:"",stay:"停留約1小時",map:"https://www.google.com/maps/search/?api=1&query=Schloss%20Belvedere%20Wien"},
+    {travel:"🚇 約20分鐘（轉乘往東區百水公寓,距離較遠）"},
+    {time:"17:40",title:"漢德瓦薩之家(Hundertwasserhaus)",loc:"維也納",emoji:"museum",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Hundertwasserhaus%20Wien.JPG",highlight:true,stay:"停留約45分",map:"https://www.google.com/maps/search/?api=1&query=Hundertwasserhaus%20Wien"},
+    {travel:"🚶 約10分鐘"},
+    {time:"19:00",title:"晚餐",loc:"維也納",emoji:"food",photo:"",note:"地點未定,交通時間抓大概"},
+    {travel:"🚇 約20分鐘（轉乘往北區沃蒂夫教堂,距離較遠）"},
+    {time:"21:00",title:"「Light of Creation」沉浸式燈光秀",loc:"維也納",emoji:"light",photo:"",highlight:true,stay:"停留約30分",note:"教堂內部投影秀",map:"https://www.google.com/maps/search/?api=1&query=Votivkirche%20Wien"},
+  ]},
+  { day:"Day 6", date:"10/19", weekday:"週一", title:"維也納 → 哈修塔特,湖畔小鎮悠閒漫步",
+    banner:"行程改版:今晚直接住哈修塔特,不是先到薩爾斯堡。住宿已確認:Gasthof Simony Hallstatt,10/19-10/20,1間Classic Triple Room。維也納→哈修塔特建議搭火車經Attnang-Puchheim轉車,總車程約3.5~4小時,抵達哈修塔特車站後還要搭渡輪過湖(約10分鐘)才到小鎮", items:[
+    {time:"08:00",title:"維也納出發,搭火車前往哈修塔特",loc:"維也納",emoji:"train",photo:"",highlight:true,note:"經Attnang-Puchheim轉車,約3.5~4小時",map:"https://www.google.com/maps/search/?api=1&query=Wien%20Hauptbahnhof"},
+    {travel:"🚆 約3.5~4小時（含轉車）"},
+    {time:"約11:30",title:"抵達Hallstatt車站",loc:"哈修塔特",emoji:"train",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Hallstatt%20Bahnhof"},
+    {travel:"⛴️ 渡輪約10分鐘"},
+    {time:"約11:45",title:"渡輪抵達哈修塔特小鎮",loc:"哈修塔特",emoji:"ship",photo:"",note:"渡輪配合火車班次發船,通常不用久等",map:"https://www.google.com/maps/search/?api=1&query=Hallstatt%20Ferry%20Pier"},
+    {time:"12:00",title:"午餐",loc:"哈修塔特",emoji:"food",photo:""},
+    {time:"13:00~17:00",title:"哈修塔特湖景拍照、小鎮漫步",loc:"哈修塔特",emoji:"lake",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Hallstatt%20-%20Nordansicht.JPG",highlight:true,stay:"時間寬裕,可以慢慢晃",note:"市集廣場、福音教堂、天主教堂墓園、World Heritage Skywalk觀景台都在步行範圍內",map:"https://www.google.com/maps/search/?api=1&query=Hallstatt"},
+    {time:"17:30",title:"入住 Gasthof Simony Hallstatt",loc:"哈修塔特",emoji:"stay",photo:"",highlight:true,note:"訂單編號2043973314,Classic Triple Room,已確認",map:"https://www.google.com/maps/search/?api=1&query=Gasthof%20Simony%20Hallstatt"},
+    {time:"19:00",title:"晚餐",loc:"哈修塔特",emoji:"food",photo:"",note:"小鎮不大,湖邊餐廳夕陽景觀不錯"},
+  ]},
+  { day:"Day 7", date:"10/20", weekday:"週二", title:"哈修塔特 → 聖沃爾夫岡(小火車) → 聖吉爾根(渡輪) → 薩爾斯堡",
+    banner:"早上公車543→541→546去聖沃爾夫岡,下午改搭渡輪到聖吉爾根(比原本走Strobl的全公車路線多一段湖上風景),再轉150號公車回薩爾斯堡。⚠️精確銜接分鐘數請出發前用ooevv.at官方查詢工具輸入10/20日期確認,人工比對PDF時刻表風險較高", items:[
+    {time:"07:30",title:"哈修塔特退房,前往Lahn站牌搭543號公車",loc:"哈修塔特",emoji:"bus",photo:"",highlight:true,note:"往Gosaumühle方向",map:"https://www.google.com/maps/search/?api=1&query=Hallstatt%20Lahn%20Bushaltestelle"},
+    {travel:"🚌 約15~20分鐘"},
+    {time:"約07:50",title:"Gosaumühle站下車,轉541號公車",loc:"巴德伊舍",emoji:"bus",photo:"",highlight:true,note:"往Bad Ischl方向",map:"https://www.google.com/maps/search/?api=1&query=Hallstatt%20Gosaumuhle%20Bushaltestelle"},
+    {travel:"🚌 約20分鐘"},
+    {time:"約08:10",title:"抵達Bad Ischl Bahnhof (Busterminal),轉546號公車",loc:"巴德伊舍",emoji:"bus",photo:"",highlight:true,note:"往St.Wolfgang方向",map:"https://www.google.com/maps/search/?api=1&query=Bad%20Ischl%20Bahnhof%20Busterminal"},
+    {travel:"🚌 約40分鐘"},
+    {time:"約08:50",title:"抵達St.Wolfgang Schafbergbahnhof",loc:"聖沃爾夫岡",emoji:"bus",photo:"",note:"纜車山下站,下車即達",ref:"https://www.leo-travel.idv.tw/83708/austria-salzburg-st-wolfgang",map:"https://www.google.com/maps/search/?api=1&query=Schafbergbahn%20Talstation%20St.%20Wolfgang"},
+    {time:"約09:00~11:00",title:"沙夫山小火車登頂,俯瞰七湖連珠",loc:"聖沃爾夫岡",emoji:"train",photo:"",highlight:true,stay:"來回約2小時",map:"https://www.google.com/maps/search/?api=1&query=Schafbergbahn%20St.%20Wolfgang"},
+    {time:"約11:00~12:15",title:"聖沃爾夫岡小鎮散步、教堂、白馬飯店、午餐",loc:"聖沃爾夫岡",emoji:"square",photo:"",map:"https://www.google.com/maps/search/?api=1&query=St.%20Wolfgang%20im%20Salzkammergut"},
+    {travel:"🚶 約5~10分鐘走到碼頭"},
+    {time:"12:30",title:"搭渡輪前往聖吉爾根",loc:"聖沃爾夫岡",emoji:"ship",photo:"",highlight:true,note:"平日船班,約45分鐘,官方時刻表已確認",map:"https://www.google.com/maps/search/?api=1&query=St.Wolfgang%20Markt%20Schiffanlegestelle"},
+    {travel:"⛴️ 約45分鐘,湖上風景"},
+    {time:"約13:15",title:"抵達聖吉爾根",loc:"其他",emoji:"lake",photo:"",note:"莫札特母親的出生地,若時間充裕可稍微逛一下再轉車",map:"https://www.google.com/maps/search/?api=1&query=St.%20Gilgen"},
+    {time:"約13:30",title:"轉150號公車前往薩爾斯堡",loc:"其他",emoji:"bus",photo:"",highlight:true,note:"⚠️精確發車分鐘數請出發前用ooevv.at或salzburg-verkehr.at確認",map:"https://www.google.com/maps/search/?api=1&query=St.%20Gilgen%20Busbahnhof"},
+    {travel:"🚌 約50分鐘"},
+    {time:"約14:20",title:"抵達薩爾斯堡,入住 Europa Salzburg Trend Hotel",loc:"薩爾斯堡",emoji:"stay",photo:"",highlight:true,note:"Rainerstraße 31,先寄放行李",map:"https://www.google.com/maps/search/?api=1&query=Europa+Salzburg+Trend+Hotel+Rainerstrasse+31"},
+    {time:"14:15",title:"米拉貝爾宮花園",loc:"薩爾斯堡",emoji:"garden",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Mirabellgarten%20Salzburg"},
+    {time:"15:00",title:"莫札特廣場",loc:"薩爾斯堡",emoji:"square",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Mozartplatz%20Salzburg"},
+    {time:"15:15",title:"托馬塞利咖啡館",loc:"薩爾斯堡",emoji:"food",photo:"",note:"莫札特常造訪的百年咖啡館",map:"https://www.google.com/maps/search/?api=1&query=Caf%C3%A9%20Tomaselli%20Salzburg"},
+    {time:"15:45",title:"薩爾斯堡主教座堂",loc:"薩爾斯堡",emoji:"church",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Salzburger%20Dom"},
+    {time:"16:15",title:"聖章廣場",loc:"薩爾斯堡",emoji:"square",photo:"",note:"巨大金球雕塑拍照",map:"https://www.google.com/maps/search/?api=1&query=Kapitelplatz%20Salzburg"},
+    {time:"16:40",title:"薩爾斯堡要塞",loc:"薩爾斯堡",emoji:"castle",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Hohensalzburg%20Castle.jpg",highlight:true,stay:"停留約1小時",note:"縮短版,搭纜車上山+瞭望台",map:"https://www.google.com/maps/search/?api=1&query=Festung%20Hohensalzburg"},
+    {time:"17:45",title:"糧食胡同老城區散步",loc:"薩爾斯堡",emoji:"square",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Getreidegasse%20Salzburg"},
+    {time:"18:15",title:"莫札特出生地",loc:"薩爾斯堡",emoji:"museum",photo:"",note:"外觀拍照,不進去",map:"https://www.google.com/maps/search/?api=1&query=Mozarts%20Geburtshaus%20Salzburg"},
+    {time:"19:00",title:"晚餐",loc:"薩爾斯堡",emoji:"food",photo:"",note:"推薦Wirtshaus zum Zirkelwirt或Balkan Grill Walter"},
+  ]},
+  { day:"Day 8", date:"10/21", weekday:"週三", title:"薩爾斯堡 → 慕尼黑,市區散策",
+    banner:"早上先去托馬塞利咖啡館吃早餐(平日07:00開門,剛好接上),從飯店走路約20分鐘,吃完再走回飯店拿行李退房。火車票已確認:09:00 Salzburg Hbf出發(月台3A-C),Railjet Xpress 260次,10:43抵達München Hbf(月台11)。慕尼黑市區路線重排:卡爾廣場→阿桑教堂(必去)→Schmalznudel炸油糕→Viktualienmarkt(順便午餐)→聖彼得教堂→瑪利亞廣場→慕尼黑王宮(必去,冬季時間10:00-17:00最晚入場16:00),全程步行順路不繞遠,英式花園這次拿掉了,時間留給王宮", items:[
+    {time:"06:40",title:"從Europa Salzburg Trend Hotel出發,步行前往托馬塞利咖啡館",loc:"薩爾斯堡",emoji:"walk",photo:"",note:"Rainerstraße 31出發,約20分鐘",map:"https://www.google.com/maps/search/?api=1&query=Europa+Salzburg+Trend+Hotel+Rainerstrasse+31"},
+    {travel:"🚶 約20分鐘"},
+    {time:"07:00",title:"托馬塞利咖啡館早餐",loc:"薩爾斯堡",emoji:"food",photo:"",highlight:true,stay:"停留約1小時",note:"莫札特家族常造訪的百年咖啡館,平日07:00開門,早餐套餐現點",map:"https://www.google.com/maps/search/?api=1&query=Cafe+Tomaselli+Salzburg"},
+    {travel:"🚶 約20分鐘走回飯店"},
+    {time:"08:20",title:"返回飯店,收拾行李、退房",loc:"薩爾斯堡",emoji:"stay",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Europa+Salzburg+Trend+Hotel+Rainerstrasse+31"},
+    {time:"08:45",title:"前往薩爾斯堡車站",loc:"薩爾斯堡",emoji:"train",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Salzburg%20Hauptbahnhof"},
+    {time:"09:00",title:"搭乘 Railjet Xpress 260 前往慕尼黑",loc:"薩爾斯堡",emoji:"train",photo:"",highlight:true,note:"月台3A-C,車票已確認",map:"https://www.google.com/maps/search/?api=1&query=Salzburg%20Hauptbahnhof"},
+    {travel:"🚆 約1小時43分"},
+    {time:"10:43",title:"抵達慕尼黑總站,入住 Hotel Cocoon München Stachus",loc:"慕尼黑",emoji:"stay",photo:"",highlight:true,note:"München Hbf月台11(Gl.5-10)下車。飯店Adolf-Kolping-Straße 11,先寄放行李,離中央車站跟舊城區都近",map:"https://www.google.com/maps/search/?api=1&query=Hotel+Cocoon+Munchen+Stachus"},
+    {travel:"🚶 約5分鐘"},
+    {time:"11:15",title:"卡爾廣場",loc:"慕尼黑",emoji:"square",photo:"",stay:"停留15分",note:"卡爾城門(Karlstor)舊城入口",map:"https://www.google.com/maps/search/?api=1&query=Karlsplatz%20Munich"},
+    {travel:"🚶 約10分鐘"},
+    {time:"11:40",title:"阿桑教堂",loc:"慕尼黑",emoji:"church",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Asamkirche%20Munich%20interior.jpg",highlight:true,stay:"停留20分",note:"洛可可風格代表作,內部裝飾極為華麗,一定要去的點",map:"https://www.google.com/maps/search/?api=1&query=Asamkirche%20Munich"},
+    {travel:"🚶 約8分鐘"},
+    {time:"12:10",title:"Schmalznudel - Cafe Frischhut 吃甜點",loc:"慕尼黑",emoji:"food",photo:"",highlight:true,stay:"停留30分",note:"傳統炸油糕Auszogne,當地人排隊名店",ref:"https://www.threads.com/share/BAWMi_NBRx/",map:"https://www.google.com/maps/search/?api=1&query=Schmalznudel+Cafe+Frischhut+Munich"},
+    {travel:"🚶 約3分鐘"},
+    {time:"12:45",title:"Viktualienmarkt",loc:"慕尼黑",emoji:"market",photo:"",highlight:true,stay:"停留約45分",note:"傳統食品市集,順便在這裡解決午餐",map:"https://www.google.com/maps/search/?api=1&query=Viktualienmarkt%20Munich"},
+    {travel:"🚶 約3分鐘"},
+    {time:"13:35",title:"聖彼得教堂",loc:"慕尼黑",emoji:"church",photo:"",stay:"停留25分",note:"可登塔(Alter Peter)俯瞰瑪利亞廣場全景",map:"https://www.google.com/maps/search/?api=1&query=St.%20Peter%27s%20Church%20Munich"},
+    {travel:"🚶 約2分鐘"},
+    {time:"14:05",title:"瑪利亞廣場",loc:"慕尼黑",emoji:"square",photo:"",highlight:true,stay:"停留40分",note:"新市政廳鐘樓、聖母教堂雙塔,城市地標",map:"https://www.google.com/maps/search/?api=1&query=Marienplatz%20Munich"},
+    {travel:"🚶 約10分鐘"},
+    {time:"15:00",title:"慕尼黑王宮 Residenz",loc:"慕尼黑",emoji:"castle",photo:"https://commons.wikimedia.org/wiki/Special:FilePath/Residenz%20Munich%20courtyard.jpg",highlight:true,stay:"停留2小時",note:"⚠️冬季時間10月20日後改為10:00-17:00,最晚入場16:00,15:00進場很充裕。德國最大的城市宮殿,最重要的一站",map:"https://www.google.com/maps/search/?api=1&query=Residenz%20M%C3%BCnchen"},
+    {travel:"🚶 約12分鐘"},
+    {time:"17:15~18:50",title:"自由活動/回飯店稍作休息",loc:"慕尼黑",emoji:"info",photo:"",stay:"約1小時35分",note:"逛完王宮的空檔,可以回飯店放鬆一下或在舊城區附近隨意逛逛"},
+    {travel:"🚶 約10分鐘"},
+    {time:"19:00",title:"晚餐 — Haxnbauer",loc:"慕尼黑",emoji:"food",photo:"",highlight:true,note:"Tal 38,慕尼黑知名豬腳餐廳。訂位已確認:2人,透過OpenTable預訂",map:"https://www.google.com/maps/search/?api=1&query=Haxnbauer+Munich"},
+  ]},
+  { day:"Day 9", date:"10/22", weekday:"週四", title:"慕尼黑 → 曼谷", items:[
+    {time:"09:00",title:"自由活動、整理行李",loc:"慕尼黑",emoji:"info",photo:""},
+    {time:"11:30",title:"前往慕尼黑機場",loc:"慕尼黑",emoji:"info",photo:"",note:"建議提早3小時報到",map:"https://www.google.com/maps/search/?api=1&query=Munich%20Airport"},
+    {time:"14:25",title:"TG925起飛,飛往曼谷",loc:"慕尼黑",emoji:"flight",photo:"",highlight:true,note:"飛行時間約10小時40分",map:"https://www.google.com/maps/search/?api=1&query=Munich%20Airport"},
+    {time:"隔日06:05",title:"抵達曼谷素萬那普機場",loc:"曼谷",emoji:"flight",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Suvarnabhumi%20Airport"},
+  ]},
+  { day:"Day 10", date:"10/23", weekday:"週五", title:"曼谷轉機一日遊：早餐→金佛寺→芒果飯→奶油螃蟹→ICONSIAM，飛回台北",
+    banner:"轉機日全程搭Grab/嘟嘟車移動,吃喝按正常速度抓時間。最後一段Mae Klong Hua Pla Mo Fai→ICONSIAM→機場距離較遠,車程抓寬鬆一點。15:00抵達機場,17:15 TG636起飛", items:[
+    {time:"06:05",title:"抵達曼谷素萬那普機場",loc:"曼谷",emoji:"flight",photo:"",map:"https://www.google.com/maps/search/?api=1&query=Suvarnabhumi%20Airport"},
+    {time:"06:05~06:40",title:"入境、提領行李",loc:"曼谷",emoji:"info",photo:"",stay:"約35分"},
+    {travel:"🚗 Grab約35分鐘"},
+    {time:"07:15",title:"朱拉50巷廚房 — 早餐",loc:"曼谷",emoji:"food",photo:"",highlight:true,stay:"停留45分",map:"https://www.google.com/maps/search/?api=1&query=Chula+Soi+50+Kitchen+Bangkok"},
+    {travel:"🛺 嘟嘟車約15分鐘"},
+    {time:"08:15",title:"Smoothies Drink Healthy — 買飲料",loc:"曼谷",emoji:"food",photo:"",stay:"停留15分",map:"https://www.google.com/maps/search/?api=1&query=Smoothies+Drink+Healthy+Bantadthong+Bangkok"},
+    {travel:"🚗 Grab約20分鐘"},
+    {time:"08:50",title:"金佛寺 — 快速打卡拍照",loc:"曼谷",emoji:"square",photo:"",stay:"停留15分",map:"https://www.google.com/maps/search/?api=1&query=Wat%20Traimit%20Bangkok"},
+    {travel:"🚶 約10分鐘"},
+    {time:"09:15",title:"Wanjai Cafe House @SongWat — 吃芒果飯",loc:"曼谷",emoji:"food",photo:"",highlight:true,stay:"停留45分",map:"https://www.google.com/maps/search/?api=1&query=Wanjai+Cafe+House+SongWat+Bangkok"},
+    {travel:"🚗 Grab約15分鐘"},
+    {time:"10:15",title:"Auntie Mhoo's Juice & Smoothies — 買飲料",loc:"曼谷",emoji:"food",photo:"",stay:"停留15分",map:"https://www.google.com/maps/search/?api=1&query=Auntie+Mhoo's+Juice+%26+Smoothies+Bangkok"},
+    {travel:"🚗 Grab約30分鐘（約9km,距離較遠）"},
+    {time:"11:00",title:"Mae Klong Hua Pla Mo Fai — 吃奶油螃蟹",loc:"曼谷",emoji:"food",photo:"",highlight:true,stay:"停留1小時",map:"https://www.google.com/maps/search/?api=1&query=Mae+Klong+Hua+Pla+Mo+Fai+Bangkok"},
+    {travel:"🚗 Grab約30分鐘"},
+    {time:"12:30",title:"ICONSIAM — 隨便逛逛耗時間",loc:"曼谷",emoji:"square",photo:"",highlight:true,stay:"停留約1.5小時",note:"河岸大型購物中心,本身很大,這次只是打發時間不用逛完",map:"https://www.google.com/maps/search/?api=1&query=ICONSIAM%20Bangkok"},
+    {travel:"🚗 Grab約1小時（約26km,回機場車程較長,抓寬鬆一點）"},
+    {time:"15:00",title:"抵達蘇凡納布機場",loc:"曼谷",emoji:"flight",photo:"",highlight:true,note:"距17:15登機還有2小時15分,辦理登機、安檢、出境時間足夠",map:"https://www.google.com/maps/search/?api=1&query=Suvarnabhumi%20Airport"},
+    {time:"17:15",title:"TG636起飛,飛往台北",loc:"曼谷",emoji:"flight",photo:"",highlight:true,note:"預計22:10抵達桃園機場",map:"https://www.google.com/maps/search/?api=1&query=Suvarnabhumi%20Airport"},
+  ]},
+];
+
+let currentIdx = 0;
+function render(){
+  const day = DAYS[currentIdx];
+  const app = document.getElementById('app');
+  const tabsHtml = DAYS.map((d,i)=>`<div class="day-tab ${i===currentIdx?'active':''}" data-idx="${i}">${d.date}</div>`).join('');
+  const bannerHtml = day.banner ? `<div class="banner">ℹ️ ${day.banner}</div>` : '';
+
+  let itemsHtml = '';
+  let stopNum = 1;
+  day.items.forEach((it)=>{
+    if(it.travel){
+      const parts = it.travel.split(' ');
+      itemsHtml += `<div class="connector"><span class="pill">${it.travel} ›</span></div>`;
+      return;
+    }
+    const titleInner = it.map
+      ? `<a class="stop-title" href="${it.map}" target="_blank" rel="noreferrer">${it.title}</a>`
+      : `<div class="stop-title">${it.title}</div>`;
+    const metaBits = [];
+    if(it.stay) metaBits.push(it.stay);
+    if(it.note) metaBits.push('有筆記');
+    const metaHtml = metaBits.length ? `<div class="stop-meta">${metaBits.join(' · ')}</div>` : '';
+    const noteHtml = (it.note && !it.stay) ? `<div class="stop-note">${it.note}</div>` : (it.note ? `<div class="stop-note">${it.note}</div>` : '');
+    const refHtml = it.ref ? `<a href="${it.ref}" target="_blank" rel="noreferrer" class="ref-link">📖 參考資料</a>` : '';
+
+    const thumbInner = it.photo
+      ? `<img src="${it.photo}" alt="${it.title}" loading="lazy" onerror="this.parentElement.innerHTML='<span class=placeholder-icon>🖼️</span>';">`
+      : `<span class="placeholder-icon">🖼️</span>`;
+
+    itemsHtml += `
+      <div class="card-wrap">
+        <div class="card ${it.highlight?'gold':''}">
+          <div class="thumb">
+            ${thumbInner}
+            <span class="flag-num">${stopNum}</span>
+          </div>
+          <div class="card-body">
+            <div class="time-row">
+              <span class="cam-icon">📷</span>
+              <span class="time-text">${it.time}</span>
+            </div>
+            ${titleInner}
+            ${metaHtml}
+            ${noteHtml}
+            ${refHtml}
+          </div>
+          <div class="nav-circle">➤</div>
+        </div>
+      </div>`;
+    stopNum++;
+  });
+
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="back-btn">‹</div>
+      <div class="title-pill">德捷奧自由行</div>
+      <div class="icon-btn">⚙️</div>
+    </div>
+    <div class="day-tabs">${tabsHtml}</div>
+    <div class="day-head">
+      <div class="day-title">${day.day} ${day.date}（${day.weekday}）${day.title}</div>
+      ${bannerHtml}
+    </div>
+    <div class="timeline">${itemsHtml}</div>
+  `;
+  document.querySelectorAll('.day-tab').forEach(btn=>{
+    btn.onclick = ()=>{ currentIdx = parseInt(btn.dataset.idx); render(); window.scrollTo(0,0); };
+  });
+}
+render();
+</script>
+</body>
+</html>
